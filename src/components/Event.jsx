@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
 import { Link } from 'react-router-dom';
+import { deleteEvent } from '../service/api';
 export default function Event(props)
 {  
      const [e,SetEvent]=useState(props.e)
@@ -19,6 +20,8 @@ export default function Event(props)
         nbParticipants:previousEvent.nbParticipants+1,
         nbTickets:previousEvent.nbTickets-1}))}
 
+    
+
     return<>
 
     <Card style={{ width: '18rem' }}>
@@ -33,6 +36,7 @@ export default function Event(props)
         </Card.Text>
         <Button variant="danger" onClick={like}>{e.like?"dislike":"like"}</Button>
         <Button variant="primary" onClick={bookEvent} disabled={e.nbTickets===0?true:false}>book an event </Button>
+        <Button variant="primary" onClick={deleteEvent} >Delete </Button>
       </Card.Body>
     </Card>
 

@@ -14,6 +14,8 @@ export default function NavigationBar() {
           <Nav className="me-auto">
             <NavLink to="events" 
             style={({isActive})=>({textDecoration:isActive?"underline":"none"})}>Events</NavLink>
+             <NavLink to="AddEvent" 
+            style={({isActive})=>({textDecoration:isActive?"underline":"none"})}>AddEvent</NavLink>
           </Nav>
         </Container>
       </Navbar>

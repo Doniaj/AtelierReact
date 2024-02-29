@@ -13,6 +13,12 @@ export default function Events()
     setTimeout(()=>SetShowAlert(false),2000)
 }
 
+const deleteEvent=async(id)=>{
+   await deleteEvent(id)
+   setListEvent(listEvent.filter((e)=>(e.id!==id)))
+}
+
+
 useEffect(()=>{
     SetShowWelcome(true),
     setTimeout(()=>SetShowWelcome(false),2000)
@@ -21,6 +27,13 @@ useEffect(()=>{
         
     }
 })
+
+// useEffect(()=>{
+//     const fetchlist=async()=>
+//        const events= await getallEvents()
+
+   
+// })
 
 
     return<>
