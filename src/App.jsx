@@ -1,15 +1,32 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import Events from './components/Events'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import {Routes,Route} from 'react-router-dom'
+import NotFound from './components/NotFound'
+import NavigationBar from './components/NavigationBar'
+import EventDetails from './components/EventDetails'
+import React from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
 
+  const EventDetails=React.lazy(()=>import("../src/components/EventDetails"))
+  const NotFound=React.lazy(()=>import("../src/components/NotFound"))
+  const Events=React.lazy(()=>import("../src/components/Events"))
   return (
     <>
-     <Events/>
+     <Suspense fallback={<p>loading . . .</p>}>
+     <NavigationBar/>
+     <Routes>
+       <Route path="/events">
+        <Route index element={<Events/>}/>
+        <Route path='details/:nom' element={<EventDetails/>}/>
+       </Route>
+       <Route path='*' element={<NotFound/>}/>
+       
+     </Routes>
+     </Suspense>
     </>
   )
 }
