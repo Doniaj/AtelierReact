@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { addEvent } from "../service/api";
+import { getallEvents, editEvent } from "../service/api";
 
-export default function AddEvent() {
+export default function UpdateEvent({ eventId }) {
   const navigate = useNavigate();
 
   const [eventItem, setEventItem] = useState({
@@ -16,26 +16,48 @@ export default function AddEvent() {
     like: false,
   });
 
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      try {
+        const response = await getallEvents(eventId);
+        console.log("API Response:", response.data);
+
+        if (response.data && response.data.length > 0) {
+          setEventItem(response.data[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching event details:", error);
+      }
+    };
+
+    fetchEventDetails();
+  }, [eventId]);
+
   const onInputChange = (e) => {
-    setEventItem({
-      ...eventItem,
+    setEventItem((prevEventItem) => ({
+      ...prevEventItem,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const onFileChange = (e) => {
-    setEventItem({
-      ...eventItem,
-      [e.target.name]: e.target.files[0].name,
-    });
+    setEventItem((prevEventItem) => ({
+      ...prevEventItem,
+      [e.target.name]: e.target.files[0] ? e.target.files[0].name : '',
+    }));
   };
 
-  const handleAddEvent = async () => {
+  const handleUpdateEvent = async () => {
     try {
-      await addEvent(eventItem);
+      if (!eventId) {
+        console.error('Event ID is undefined');
+        return;
+      }
+  
+      await editEvent(eventId, eventItem);
       navigate("/events");
     } catch (error) {
-      console.error("Error adding event:", error);
+      console.error("Error updating event:", error);
     }
   };
 
@@ -45,7 +67,7 @@ export default function AddEvent() {
 
   return (
     <Container style={{ marginTop: "30px" }}>
-      <h2>Add a new Event to your Event List</h2>
+      <h2>Update Event</h2>
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Name</Form.Label>
@@ -54,9 +76,7 @@ export default function AddEvent() {
             type="text"
             placeholder="Enter a Name"
             value={eventItem.name}
-            onChange={(e) => {
-              onInputChange(e);
-            }}
+            onChange={(e) => onInputChange(e)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -67,9 +87,7 @@ export default function AddEvent() {
             placeholder="Enter description "
             name="description"
             value={eventItem.description}
-            onChange={(e) => {
-              onInputChange(e);
-            }}
+            onChange={(e) => onInputChange(e)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -78,9 +96,7 @@ export default function AddEvent() {
             type="number"
             name="price"
             value={eventItem.price}
-            onChange={(e) => {
-              onInputChange(e);
-            }}
+            onChange={(e) => onInputChange(e)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
@@ -89,17 +105,15 @@ export default function AddEvent() {
             type="number"
             name="nbTickets"
             value={eventItem.nbTickets}
-            onChange={(e) => {
-              onInputChange(e);
-            }}
+            onChange={(e) => onInputChange(e)}
           />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Image</Form.Label>
           <Form.Control type="file" name="img" onChange={(e) => onFileChange(e)} />
         </Form.Group>
-        <Button variant="primary" onClick={handleAddEvent}>
-          Add an Event
+        <Button variant="primary" onClick={handleUpdateEvent}>
+          Update Event
         </Button>
         <Button variant="secondary" onClick={handleCancel}>
           Cancel

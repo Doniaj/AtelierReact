@@ -9,7 +9,7 @@ import NotFound from './components/NotFound'
 import NavigationBar from './components/NavigationBar'
 import EventDetails from './components/EventDetails'
 import AddEvent from './components/AddEvent'
-
+import UpdateEvent from './components/UpdateEvent';
 
 function App() {
 
@@ -27,7 +27,7 @@ function App() {
         <Route index element={<Events/>}/>
         <Route path='AddEvent' element={<AddEvent/>}/>
         <Route path='details/:nom' element={<EventDetails/>}/>
-        
+        <Route path="/events/update/:eventId" element={<UpdateEvent />} /> 
        </Route>
        <Route path='AddEvent' element={<AddEvent/>}/>
        <Route path='*' element={<NotFound/>}/>
